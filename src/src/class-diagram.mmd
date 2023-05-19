@@ -1,0 +1,146 @@
+```mermaid
+classDiagram
+  class ActionHandler {
+    -messageBus: IMessageBus
+    -moduleManager: IModuleManager
+    -taskQueue: ITaskQueue
+    -parameters: IParameters
+    -openai: IOpenAI
+    -console: IConsole
+    -memory: IMemory
+    +handleAction(action: Action): Promise<void>
+  }
+
+  class Agent {
+    -id: string
+    -messageBus: IMessageBus
+    -moduleManager: IModuleManager
+    -taskQueue: ITaskQueue
+    -parameters: IParameters
+    -openai: IOpenAI
+    -console: IConsole
+    -memory: IMemory
+    +start(): Promise<void>
+  }
+
+  class Console {
+    +log(message: string): void
+    +error(message: string): void
+  }
+
+  class InMemoryMessageBus {
+    -subscriptions: Map<string, Set<Function>>
+    +subscribe(topic: string, callback: Function): void
+    +unsubscribe(topic: string, callback: Function): void
+    +publish(topic: string, message: any): void
+  }
+
+  class Memory {
+    -data: Map<string, any>
+    +get(key: string): any
+    +set(key: string, value: any): void
+    +delete(key: string): void
+  }
+
+  class Message {
+    -sender: string
+    -recipient: string
+    -content: any
+    +constructor(sender: string, recipient: string, content: any)
+    +getSender(): string
+    +getRecipient(): string
+    +getContent(): any
+  }
+
+  class ModuleDefinition {
+    -name: string
+    -actions: Map<string, ActionDefinition>
+    -externalPackages: Set<string>
+    +constructor(name: string)
+    +addAction(action: ActionDefinition): void
+    +getAction(name: string): ActionDefinition
+    +getActions(): Map<string, ActionDefinition>
+    +addExternalPackage(name: string): void
+    +getExternalPackages(): Set<string>
+  }
+
+  class ModuleInstance {
+    -definition: ModuleDefinition
+    -memory: IMemory
+    -console: IConsole
+    -openai: IOpenAI
+    +constructor(definition: ModuleDefinition, memory: IMemory, console: IConsole, openai: IOpenAI)
+    +getDefinition(): ModuleDefinition
+    +getMemory(): IMemory
+    +getConsole(): IConsole
+    +getOpenAI(): IOpenAI
+    +invokeAction(action: Action): Promise<void>
+  }
+
+  class ModuleManager {
+    -modules: Map<string, ModuleDefinition>
+    -instances: Map<string, ModuleInstance>
+    +constructor()
+    +addModule(definition: ModuleDefinition): void
+    +getModule(name: string): ModuleDefinition
+    +getModules(): Map<string, ModuleDefinition>
+    +createInstance(name: string, memory: IMemory, console: IConsole, openai: IOpenAI): ModuleInstance
+    +getInstance(name: string): ModuleInstance
+    +getInstances(): Map<string, ModuleInstance>
+  }
+
+  class OpenAI {
+    +getApiKey(): string
+    +setApiKey(apiKey: string): void
+    +getEngine(): string
+    +setEngine(engine: string): void
+    +getPrompt(): string
+    +setPrompt(prompt: string): void
+    +getTemperature(): number
+    +setTemperature(temperature: number): void
+    +getMaxTokens(): number
+    +setMaxTokens(maxTokens: number): void
+    +getTopP(): number
+    +setTopP(topP: number): void
+    +getFrequencyPenalty(): number
+    +setFrequencyPenalty(frequencyPenalty: number): void
+    +getPresencePenalty(): number
+    +setPresencePenalty(presencePenalty: number): void
+    +getStopSequences(): string[]
+    +setStopSequences(stopSequences: string[]): void
+    +getCompletion(prompt: string): Promise<string>
+  }
+
+  class Parameters {
+    -data: Map<string, any>
+    +constructor()
+    +set(key: string, value: any): void
+    +get(key: string): any
+    +has(key: string): boolean
+  }
+
+  class RedisMessageBus {
+    -redisClient: RedisClient
+    -subscriptions: Map<string, Set<Function>>
+    +constructor(redisClient: RedisClient)
+    +subscribe(topic: string, callback: Function): void
+    +unsubscribe(topic: string, callback: Function): void
+    +publish(topic: string, message: any): void
+  }
+
+  class Store {
+    -redisClient: RedisClient
+    +constructor(redisClient: RedisClient)
+    +set(key: string, value: any): Promise<void>
+    +get(key: string): Promise<any>
+    +delete(key: string): Promise<void>
+  }
+
+  class TaskQueue {
+    -queue: Queue
+    -messageBus: IMessageBus
+    +constructor(messageBus: IMessageBus)
+    +enqueue(action: Action): Promise<void>
+    +dequeue(): Promise<Action>
+  }
+```

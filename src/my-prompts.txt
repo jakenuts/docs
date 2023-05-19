@@ -1,0 +1,16 @@
+Review the typescript source files in the src folder and its subdirectories. Create a markdown summary of what each typescript source file does when it's run. Then create a mermaid diagram of its flow.
+
+
+Create a list of all the typescript source files in the src folder and all of their subdirectories.
+
+
+Create a list of every typescript file under the src folder. Then add a 
+
+Create an outline of every typescript file in the src folder and all it's subdirectories. 
+Under each filename add a list of all the functions in that file.
+
+
+Create a list of every Typescript file under the src directory and all its subdirectories.
+Under each entry in the list, add the names of every function in the typescript file and any calls made to other
+
+Create a mermaid class diagram showing the classes, functions and relationships of every source code file in the src directory and all it's subdirectories and write it to the disk. 
